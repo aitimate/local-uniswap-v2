@@ -1,11 +1,23 @@
 import {HardhatUserConfig} from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import "hardhat-abi-exporter";
 
 const settings = {optimizer: {enabled: true, runs: 200}};
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
+  abiExporter: [{ // 额外导出ABI接口: web3和ethers
+    runOnCompile: true,
+    clear: true,
+    path: './abi/web3',
+    format: "json"
+  }, {
+    runOnCompile: true,
+    clear: true,
+    path: './abi/ethers',
+    format: "fullName"
+  }],
   networks: {
-    hardhat: {
+    hardhat: { // 控制区块挖出速度，默认情况下有交易才挖块
       mining: {
         auto: false,
         interval: 1000

@@ -14,6 +14,15 @@ async function main() {
     const {weth_usdt} = await createPairs(weth, usdt, tokn, router1, factory1);
     await createPairs(weth, usdt, tokn, router2, factory2);
     // TODO 部署自己的合约
+    console.log(`\n${"-".repeat(32) + deployTokens.name + "-".repeat(32)}`);
+    // 账号2 approve router1
+    const [, a1] = await ethers.getSigners();
+    await (await weth.transfer(a1.address, 1000n * 10n ** 18n)).wait();
+    console.log("weth balance of " + a1.address, (await weth.balanceOf(a1.address)).toString())
+    // 查询 账号2 approve router1的情况
+    await (await weth.connect(a1).approve(router1.address, ethers.constants.MaxInt256)).wait()
+    const allowance = await weth.allowance(a1.address,router1.address);
+    console.log("weth allowance ", router1.address, allowance.toString())
 }
 
 
